@@ -31,7 +31,7 @@ const _createStructure = (nodes) => {
     let structuredObjects = [];
 
     for (let i = 0; i < nodes.length; i++) {
-        structuredObjects.push({...nodes[i], children: []});
+        structuredObjects.push({...nodes[i], children: [], isSelected : false});
     }
 
     return structuredObjects;
@@ -53,4 +53,26 @@ const _getparentNode = (childNode, nodeList) => {
     }
 
     return parent;
+}
+
+const _updateNode = (node, nodeId, updatedNode) => {
+    if (node.id == nodeId) {
+        node = updatedNode;
+    } else if (node.children.length){
+        node.children = node.children.map(function(item) {
+            return _updateNode(item, item.id, updatedNode)
+        })
+    }
+
+    return node;
+}
+
+export const updateNodeSelection = (node, updatedNode) => {
+    console.log(node);
+    console.log(updatedNode);
+    let x = _updateNode(node[0], updatedNode.id, updatedNode);
+    // console.log(x);
+    let y = [];
+    y.push(x);
+   return y;
 }

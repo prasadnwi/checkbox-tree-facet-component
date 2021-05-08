@@ -5,3 +5,7 @@
     display:inline;
     float:left;
 }
+.inline-item {
+    display: inline;
+    cursor: all-scroll;
+}
