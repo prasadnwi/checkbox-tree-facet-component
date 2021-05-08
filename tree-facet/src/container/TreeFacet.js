@@ -1,31 +1,28 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import '../css/treeFacet.css';
 import ParentNode from '../component/tree/ParentNode';
 import data  from '../data/response.json';
 import { convertToHierarchy } from '../util/data';
+import Context from '../context/Context';
 
-class TreeFacet extends React.Component{
-    state = {
-        listOfNodes: []
-    }
+const TreeFacet = () => {
 
-    componentDidMount(){
-        this.setState({
-            listOfNodes: convertToHierarchy(data.data.categories)
-        })
-    }
+    const {setNodeList, nodeList} = useContext(Context);
 
-    render(){
-        return (
-            <div>
-                {this.state.listOfNodes.map((node, index) => {
-                    return (
-                        <ParentNode data = {node} key={index}/>
-                    )
-                })}
-            </div> 
-        )
-    }    
+    useEffect( () => {
+        const dataList = convertToHierarchy(data.data.categories);
+        setNodeList(dataList);
+    },[])
+
+    return (
+        <div>
+            {nodeList.map((node, index) => {
+                return (
+                    <ParentNode data = {node} key={index}/>
+                )
+            })}
+        </div> 
+    )    
 }
 
 export default TreeFacet;
