@@ -1,32 +1,28 @@
 import React, { useState } from "react";
 import ParentNode from './ParentNode';
+import { BiCaretRight, BiCaretDown } from "react-icons/bi";
+import { Checkbox } from '@material-ui/core';
+import '../../css/childNode.css';
 
 const Node = ({ item }) => {
     const [childVisible, setChildVisiblity] = useState(false);
     const hasChild = item && item.children.length ? true : false;
 
     return (
-        <li className="d-tree-node border-0">
+        <li className="node-list">
+
           {/* showing node */}
-          <div className="d-flex" onClick={(e) => setChildVisiblity((childVisible) => !childVisible)}>
-            {hasChild && (
-              <div
-                className={`d-inline d-tree-toggler ${
-                  childVisible ? "active" : ""
-                }`}
-              >
-              </div>
-            )}
-    
-            <div className="col d-tree-head">
-              {item && item.name}
-            </div>
+          <div onClick={(e) => setChildVisiblity((childVisible) => !childVisible)}>
+          <Checkbox color="primary"/>
+          { hasChild && 
+              (!childVisible ? <BiCaretRight/> : <BiCaretDown/>) }
+          {item && item.name}
           </div>
 
           {/* showing expnaded child nodes */}
           {hasChild && childVisible && (
-            <div className="d-tree-content">
-              <ul className="d-flex d-tree-container flex-column">
+            <div>
+              <ul>
                 {
                   item.children.map( (item, index) => {
                    return(

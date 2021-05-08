@@ -1,0 +1,7 @@
+.node-list{
+    list-style-type: none;
+}
+.node-name{
+    display:inline;
+    float:left;
+}
