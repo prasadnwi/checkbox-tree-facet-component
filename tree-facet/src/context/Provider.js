@@ -1,11 +1,15 @@
-import { Component } from 'react';
+import React, { Component }  from 'react';
+import PropTypes from 'prop-types';
 import Context from './Context';
-import {updateNodeSelection} from '../util/data';
+import { updateNodeSelection, updateAllNodes } from '../util/data';
 
 class Provider extends Component {
-    state = {
-        nodeList: []
-    };
+    constructor(props){
+        super(props);
+        this.state = {
+            nodeList: []
+        };
+    } 
 
     render(){
         return (
@@ -17,18 +21,36 @@ class Provider extends Component {
                         nodeList
                     })
                 },
-                updateSelectedNode : (updatedNode) => {
-                    let updatedTree = updateNodeSelection(this.state.nodeList, updatedNode);
+                updateSelectedNode: (updatedNode) => {
+                    let nodeList = updateNodeSelection(this.state.nodeList, updatedNode);
                     this.setState({
-                        nodeList: updatedTree
+                        nodeList
+                    })
+                },
+                unDoSelection: () => {
+                    let nodeList = updateAllNodes(this.state.nodeList, false);
+                    this.setState({
+                        nodeList
+                    })
+                },
+                selectAll: () => {
+                    let nodeList = updateAllNodes(this.state.nodeList, true);
+                    this.setState({
+                        nodeList
                     })
                 }
+
             }}>
+
                 {this.props.children}
-                
+
             </Context.Provider>
         )
     }
 }
+
+Provider.propTypes = {
+    children: PropTypes.any
+  };
 
 export default Provider;

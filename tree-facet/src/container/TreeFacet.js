@@ -4,6 +4,7 @@ import ParentNode from '../component/tree/ParentNode';
 import data  from '../data/response.json';
 import { convertToHierarchy } from '../util/data';
 import Context from '../context/Context';
+import OptionBar from '../component/option/OptionBar';
 
 const TreeFacet = () => {
 
@@ -16,6 +17,7 @@ const TreeFacet = () => {
 
     return (
         <div className="flex-container box-container">
+            <OptionBar/>
             {nodeList.map((node, index) => {
                 return (
                     <ParentNode data = {node} key={index}/>

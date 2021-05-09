@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import PropTypes from 'prop-types';
 import ParentNode from './ParentNode';
 import { BiCaretRight, BiCaretDown } from "react-icons/bi";
 import { Checkbox } from '@material-ui/core';
@@ -31,8 +32,10 @@ const Node = ({ item }) => {
               </div>
   
               <div onClick={() => setChildVisiblity((childVisible) => !childVisible)} className="inline-item">
-                { hasChild && 
-                    (!childVisible ? <BiCaretRight/> : <BiCaretDown/>) }
+                { hasChild ?
+                    (!childVisible ? <BiCaretRight/> : <BiCaretDown/>)  :
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                }
                 {item && item.name}
               </div>
             </div>
@@ -56,5 +59,9 @@ const Node = ({ item }) => {
         </li>
       );
 }
+
+Node.propTypes = {
+  item: PropTypes.object
+};
 
 export default Node;

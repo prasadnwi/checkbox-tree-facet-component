@@ -77,13 +77,13 @@ const updateNode = ( data, updatedNode) => {
     return data;
 }
 
-const updateAllChildNodes = (node, isSelected) => {
+const _updateAllChildNodes = (node, isSelected) => {
 
     node.isSelected = isSelected;
 
     if(node.children.length){
         for(let i = 0; i < node.children.length; i++) {
-            node.children[i] = updateAllChildNodes(node.children[i], isSelected)
+            node.children[i] = _updateAllChildNodes(node.children[i], isSelected)
         }
     }
 
@@ -102,7 +102,7 @@ export const updateNodeSelection = (node, newNode) => {
     isUpdatedNodeTree = false;
 
     // updating all child nodes when select a catergory
-    let processedNode = updateAllChildNodes(newNode, newNode.isSelected)
+    let processedNode = _updateAllChildNodes(newNode, newNode.isSelected)
 
     for(let i = 0; !isUpdatedNodeTree && i < node.length; i++) {
         updatedNode = updateNode(node[i], processedNode);
@@ -112,6 +112,19 @@ export const updateNodeSelection = (node, newNode) => {
         let indexOfChildNode = node.findIndex(childNode => childNode.id == updatedNode.id);
         node[indexOfChildNode] = updatedNode;
     }
+
+   return node;
+}
+
+/**
+ * 
+ * @param {*} node 
+ * @returns 
+ */
+export const updateAllNodes = (node, isSelected) => {
+   for(let i=0; i<node.length; i++){
+    _updateAllChildNodes(node[i], isSelected)
+   }
 
    return node;
 }

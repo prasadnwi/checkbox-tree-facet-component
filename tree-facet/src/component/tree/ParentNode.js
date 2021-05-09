@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import ChildNode from './ChildNode';
 
 const ParentNode = ({ data}) => {
@@ -9,6 +10,10 @@ const ParentNode = ({ data}) => {
         </ul>
       </div>
     );
-  };
+};
+
+ParentNode.propTypes = {
+  data: PropTypes.object
+};
 
 export default ParentNode;
