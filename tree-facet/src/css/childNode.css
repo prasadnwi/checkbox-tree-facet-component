@@ -1,0 +1,11 @@
+.node-list{
+    list-style-type: none;
+}
+.node-name{
+    display:inline;
+    float:left;
+}
+.inline-item {
+    display: inline;
+    cursor: all-scroll;
+}

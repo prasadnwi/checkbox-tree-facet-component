@@ -1,0 +1,12 @@
+.flex-container{
+    display: flex;
+    flex-direction: column;    
+}
+
+.box-container{
+    border:2px solid black;
+    display: inline-block;
+    margin: 5% 5% 5% 5%;
+    padding-right: 5%;
+    min-width: 15%;
+}
