@@ -1,3 +1,4 @@
+let isUpdatedNodeTree = false;
 /**
  * get node list with parents node
  * @param {array}  nodeList
@@ -55,24 +56,32 @@ const _getparentNode = (childNode, nodeList) => {
     return parent;
 }
 
-const _updateNode = (node, nodeId, updatedNode) => {
-    if (node.id == nodeId) {
-        node = updatedNode;
-    } else if (node.children.length){
-        node.children = node.children.map(function(item) {
-            return _updateNode(item, item.id, updatedNode)
-        })
+const updatePropertyById = (id, data, updatedNode) => {
+    if (data.id == id) {
+        data = updatedNode;
+        isUpdatedNodeTree = true;
+    }
+    if (data.children !== undefined && data.children.length > 0) {
+        for (let i = 0; i < data.children.length; i++) {
+             data.children[i] = updatePropertyById(id, data.children[i], updatedNode);
+        }
     }
 
-    return node;
+    return data;
 }
 
-export const updateNodeSelection = (node, updatedNode) => {
-    console.log(node);
-    console.log(updatedNode);
-    let x = _updateNode(node[0], updatedNode.id, updatedNode);
-    // console.log(x);
-    let y = [];
-    y.push(x);
-   return y;
+export const updateNodeSelection = (node, newNode) => {
+    let updatedNode ;
+    isUpdatedNodeTree = false;
+
+    for(let i = 0; !isUpdatedNodeTree && i < node.length; i++) {
+        updatedNode = updatePropertyById(newNode.id, node[i], newNode);
+    }
+
+    if(isUpdatedNodeTree){
+        let indexOfChildNode = node.findIndex(childNode => childNode.id == updatedNode.id);
+        node[indexOfChildNode] = updatedNode;
+    }
+
+   return node;
 }
