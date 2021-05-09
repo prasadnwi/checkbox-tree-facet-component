@@ -15,7 +15,7 @@ const TreeFacet = () => {
     },[])
 
     return (
-        <div>
+        <div className="flex-container box-container">
             {nodeList.map((node, index) => {
                 return (
                     <ParentNode data = {node} key={index}/>

@@ -12,8 +12,13 @@ const Node = ({ item }) => {
     const { updateSelectedNode } = useContext(Context);
 
     const onClickCheckBox = () => {
-      setChildVisiblity((childVisible) => !childVisible)
+      
       updateSelectedNode({...item, isSelected : !item.isSelected})
+      if(!childVisible){
+        if(!item.isSelected){
+          setChildVisiblity((childVisible) => !childVisible)
+        }
+      }
     }
 
     return (
