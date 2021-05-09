@@ -11,8 +11,8 @@ const OptionBar = () => {
     return (
         <div>
             <div className="button-wrapper">
-            <Switch color="primary" onChange={handleTreeVisibility}/>
-            <span>Show all Selected items</span>
+              <Switch color="primary" onChange={handleTreeVisibility}/>
+              <span>Show all Selected items</span>
             </div>
             <div>
             <div className="button button-wrapper">

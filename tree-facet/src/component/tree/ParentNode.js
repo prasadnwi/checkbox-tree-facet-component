@@ -6,7 +6,7 @@ const ParentNode = ({ data}) => {
     return (
       <div className="content-wrapper">
         <ul>
-        <ChildNode item={data}/>
+           <ChildNode item={data}/>
         </ul>
       </div>
     );
