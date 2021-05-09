@@ -1,3 +1,4 @@
+let isUpdatedNodeTree = false;
 /**
  * get node list with parents node
  * @param {array}  nodeList
@@ -31,7 +32,7 @@ const _createStructure = (nodes) => {
     let structuredObjects = [];
 
     for (let i = 0; i < nodes.length; i++) {
-        structuredObjects.push({...nodes[i], children: []});
+        structuredObjects.push({...nodes[i], children: [], isSelected : false});
     }
 
     return structuredObjects;
@@ -53,4 +54,77 @@ const _getparentNode = (childNode, nodeList) => {
     }
 
     return parent;
+}
+
+/**
+ * update node with a given node
+ * @param {object} data 
+ * @param {object} updatedNode 
+ * @returns 
+ */
+const updateNode = ( data, updatedNode) => {
+    if (data.id == updatedNode.id) {
+        data = updatedNode;
+        isUpdatedNodeTree = true;
+    }
+    
+    if (data.children !== undefined && data.children.length > 0) {
+        for (let i = 0; i < data.children.length; i++) {
+             data.children[i] = updateNode(data.children[i], updatedNode);
+        }
+    }
+
+    return data;
+}
+
+const _updateAllChildNodes = (node, isSelected) => {
+
+    node.isSelected = isSelected;
+
+    if(node.children.length){
+        for(let i = 0; i < node.children.length; i++) {
+            node.children[i] = _updateAllChildNodes(node.children[i], isSelected)
+        }
+    }
+
+    return node;
+   
+}
+
+/**
+ * update node tree with given node
+ * @param {array} node 
+ * @param {object} newNode 
+ * @returns {array}
+ */
+export const updateNodeSelection = (node, newNode) => {
+    let updatedNode ;
+    isUpdatedNodeTree = false;
+
+    // updating all child nodes when select a catergory
+    let processedNode = _updateAllChildNodes(newNode, newNode.isSelected)
+
+    for(let i = 0; !isUpdatedNodeTree && i < node.length; i++) {
+        updatedNode = updateNode(node[i], processedNode);
+    }
+
+    if(isUpdatedNodeTree){
+        let indexOfChildNode = node.findIndex(childNode => childNode.id == updatedNode.id);
+        node[indexOfChildNode] = updatedNode;
+    }
+
+   return node;
+}
+
+/**
+ * 
+ * @param {*} node 
+ * @returns 
+ */
+export const updateAllNodes = (node, isSelected) => {
+   for(let i=0; i<node.length; i++){
+    _updateAllChildNodes(node[i], isSelected)
+   }
+
+   return node;
 }

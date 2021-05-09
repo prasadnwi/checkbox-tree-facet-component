@@ -1,0 +1,9 @@
+.container{
+    display: inline;
+}
+.button-wrapper{
+    display: inline;
+}
+.button{
+    margin: 2% 0 0 2%;
+}

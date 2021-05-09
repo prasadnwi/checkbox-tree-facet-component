@@ -1,32 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import PropTypes from 'prop-types';
 import ParentNode from './ParentNode';
+import { BiCaretRight, BiCaretDown } from "react-icons/bi";
+import { Checkbox } from '@material-ui/core';
+import '../../css/childNode.css';
+import Context from '../../context/Context';
 
 const Node = ({ item }) => {
-    const [childVisible, setChildVisiblity] = useState(false);
+
+    const [visibalChild, setChildVisiblity] = useState(false);
+    const { updateSelectedNode, isTreeExpanded } = useContext(Context);
     const hasChild = item && item.children.length ? true : false;
 
+    const onClickCheckBox = () => { 
+      updateSelectedNode({...item, isSelected : !item.isSelected})
+
+      if(!visibalChild){
+        if(!item.isSelected){
+          setChildVisiblity((visibalChild) => !visibalChild)
+        }
+      }
+    }
+
+    const getChildVisibility = () => {
+      return (isTreeExpanded ? true : (visibalChild ? true : false))
+    }
+
+    useEffect(() => {
+       if(isTreeExpanded && !visibalChild){
+        setChildVisiblity(true);
+      } 
+      else if (!isTreeExpanded && visibalChild){
+        setChildVisiblity(false);
+      }
+    },[isTreeExpanded]);
+
+    const onClickItem = () => {
+      setChildVisiblity(!visibalChild)
+    }
+
     return (
-        <li className="d-tree-node border-0">
+        <li className="node-list">
           {/* showing node */}
-          <div className="d-flex" onClick={(e) => setChildVisiblity((childVisible) => !childVisible)}>
-            {hasChild && (
-              <div
-                className={`d-inline d-tree-toggler ${
-                  childVisible ? "active" : ""
-                }`}
-              >
+          <div >
+            <div>
+              <div className="inline-item">
+                <Checkbox color="primary" onClick={onClickCheckBox} checked={item.isSelected}/>
               </div>
-            )}
-    
-            <div className="col d-tree-head">
-              {item && item.name}
+  
+              <div onClick={onClickItem} className="inline-item">
+                { hasChild ?
+                    (!visibalChild ? <BiCaretRight/> : <BiCaretDown/>)  :
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                }
+                {item && item.name}
+              </div>
             </div>
           </div>
+         
 
           {/* showing expnaded child nodes */}
-          {hasChild && childVisible && (
-            <div className="d-tree-content">
-              <ul className="d-flex d-tree-container flex-column">
+          {hasChild && getChildVisibility() && (
+            <div>
+              <ul>
                 {
                   item.children.map( (item, index) => {
                    return(
@@ -40,5 +76,9 @@ const Node = ({ item }) => {
         </li>
       );
 }
+
+Node.propTypes = {
+  item: PropTypes.object
+};
 
 export default Node;
