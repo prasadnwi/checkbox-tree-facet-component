@@ -45,7 +45,7 @@ const Node = ({ item }) => {
           <div >
             <div>
               <div className="inline-item">
-                <Checkbox color="primary" onClick={onClickCheckBox} checked={item.isSelected}/>
+                <Checkbox color="primary" onClick={onClickCheckBox} checked={item.isSelected} inputProps={{ 'aria-label': `select ${item && item.name}`}}/>
               </div>
   
               <div onClick={onClickItem} className="inline-item">
