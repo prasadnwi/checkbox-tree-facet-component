@@ -7,7 +7,8 @@ class Provider extends Component {
     constructor(props){
         super(props);
         this.state = {
-            nodeList: []
+            nodeList: [],
+            isTreeExpanded: false
         };
     } 
 
@@ -16,6 +17,7 @@ class Provider extends Component {
             <Context.Provider
             value={{
                 nodeList: this.state.nodeList,
+                isTreeExpanded: this.state.isTreeExpanded,
                 setNodeList: nodeList => {
                     this.setState({
                         nodeList
@@ -38,6 +40,11 @@ class Provider extends Component {
                     this.setState({
                         nodeList
                     })
+                },
+                handleTreeVisibility: () => {
+                    this.setState((prevState) => ({
+                        isTreeExpanded: !prevState.isTreeExpanded
+                    }))
                 }
 
             }}>

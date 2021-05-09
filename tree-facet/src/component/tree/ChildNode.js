@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from 'prop-types';
 import ParentNode from './ParentNode';
 import { BiCaretRight, BiCaretDown } from "react-icons/bi";
@@ -8,18 +8,35 @@ import Context from '../../context/Context';
 
 const Node = ({ item }) => {
 
-    const [childVisible, setChildVisiblity] = useState(false);
+    const [visibalChild, setChildVisiblity] = useState(false);
+    const { updateSelectedNode, isTreeExpanded } = useContext(Context);
     const hasChild = item && item.children.length ? true : false;
-    const { updateSelectedNode } = useContext(Context);
 
-    const onClickCheckBox = () => {
-      
+    const onClickCheckBox = () => { 
       updateSelectedNode({...item, isSelected : !item.isSelected})
-      if(!childVisible){
+
+      if(!visibalChild){
         if(!item.isSelected){
-          setChildVisiblity((childVisible) => !childVisible)
+          setChildVisiblity((visibalChild) => !visibalChild)
         }
       }
+    }
+
+    const getChildVisibility = () => {
+      return (isTreeExpanded ? true : (visibalChild ? true : false))
+    }
+
+    useEffect(() => {
+       if(isTreeExpanded && !visibalChild){
+        setChildVisiblity(true);
+      } 
+      else if (!isTreeExpanded && visibalChild){
+        setChildVisiblity(false);
+      }
+    },[isTreeExpanded]);
+
+    const onClickItem = () => {
+      setChildVisiblity(!visibalChild)
     }
 
     return (
@@ -28,12 +45,12 @@ const Node = ({ item }) => {
           <div >
             <div>
               <div className="inline-item">
-                <Checkbox color="primary" onClick={() => onClickCheckBox()} checked={item.isSelected}/>
+                <Checkbox color="primary" onClick={onClickCheckBox} checked={item.isSelected}/>
               </div>
   
-              <div onClick={() => setChildVisiblity((childVisible) => !childVisible)} className="inline-item">
+              <div onClick={onClickItem} className="inline-item">
                 { hasChild ?
-                    (!childVisible ? <BiCaretRight/> : <BiCaretDown/>)  :
+                    (!visibalChild ? <BiCaretRight/> : <BiCaretDown/>)  :
                   <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 }
                 {item && item.name}
@@ -43,7 +60,7 @@ const Node = ({ item }) => {
          
 
           {/* showing expnaded child nodes */}
-          {hasChild && childVisible && (
+          {hasChild && getChildVisibility() && (
             <div>
               <ul>
                 {

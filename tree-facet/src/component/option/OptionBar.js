@@ -6,12 +6,12 @@ import '../../css/optionBar.css';
 
 const OptionBar = () => {
 
-    const { unDoSelection, selectAll } = useContext(Context);
+    const { unDoSelection, selectAll, handleTreeVisibility } = useContext(Context);
 
     return (
         <div>
             <div className="button-wrapper">
-            <Switch color="primary"/>
+            <Switch color="primary" onChange={handleTreeVisibility}/>
             <span>Show all Selected items</span>
             </div>
             <div>
