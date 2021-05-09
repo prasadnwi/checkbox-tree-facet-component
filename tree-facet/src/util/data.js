@@ -56,26 +56,56 @@ const _getparentNode = (childNode, nodeList) => {
     return parent;
 }
 
-const updatePropertyById = (id, data, updatedNode) => {
-    if (data.id == id) {
+/**
+ * update node with a given node
+ * @param {object} data 
+ * @param {object} updatedNode 
+ * @returns 
+ */
+const updateNode = ( data, updatedNode) => {
+    if (data.id == updatedNode.id) {
         data = updatedNode;
         isUpdatedNodeTree = true;
     }
+    
     if (data.children !== undefined && data.children.length > 0) {
         for (let i = 0; i < data.children.length; i++) {
-             data.children[i] = updatePropertyById(id, data.children[i], updatedNode);
+             data.children[i] = updateNode(data.children[i], updatedNode);
         }
     }
 
     return data;
 }
 
+const updateAllChildNodes = (node, isSelected) => {
+
+    node.isSelected = isSelected;
+
+    if(node.children.length){
+        for(let i = 0; i < node.children.length; i++) {
+            node.children[i] = updateAllChildNodes(node.children[i], isSelected)
+        }
+    }
+
+    return node;
+   
+}
+
+/**
+ * update node tree with given node
+ * @param {array} node 
+ * @param {object} newNode 
+ * @returns {array}
+ */
 export const updateNodeSelection = (node, newNode) => {
     let updatedNode ;
     isUpdatedNodeTree = false;
 
+    // updating all child nodes when select a catergory
+    let processedNode = updateAllChildNodes(newNode, newNode.isSelected)
+
     for(let i = 0; !isUpdatedNodeTree && i < node.length; i++) {
-        updatedNode = updatePropertyById(newNode.id, node[i], newNode);
+        updatedNode = updateNode(node[i], processedNode);
     }
 
     if(isUpdatedNodeTree){
